@@ -21,6 +21,12 @@ public class Sphere implements Renderable
 	}
 	
 	@Override
+	public Vector3D getNormalVectorAt(Point3D point) 
+	{
+		return Point3D.Subtract(point, center);
+	}
+	
+	@Override
 	public double getIntersectionValue(Ray ray) 
 	{
 		//sphere: r^2 = (x - x1)^2 + (y - y1)^2 + (z - z1)^2
@@ -76,4 +82,6 @@ public class Sphere implements Renderable
 			return -2;
 		}
 	}
+
+	
 }

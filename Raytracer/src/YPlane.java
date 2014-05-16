@@ -24,6 +24,12 @@ public class YPlane implements Renderable
 			return Color.BLACK;
 		}
 	}
+	
+	@Override
+	public Vector3D getNormalVectorAt(Point3D point) 
+	{
+		return new Vector3D(0, 1, 0);
+	}
 
 	@Override
 	public double getIntersectionValue(Ray ray) 
