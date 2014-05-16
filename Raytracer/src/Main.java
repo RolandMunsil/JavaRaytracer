@@ -9,20 +9,22 @@ public class Main
 	static int actualWidth = width - 16;
 	static int actualHeight = height - 38;
 	
+	public static Sphere sphere = new Sphere(new Point3D(0, -100, 300), 300);
+	public static YPlane plane = new YPlane(-400);
+	
+	public static Renderable[] renderedObjects = { sphere, plane };
+	
 	public static void main(String[] args) 
 	{
 		JFrame frame = new JFrame("3D Parametric Equation");
 
-        CustomPanel panel = new CustomPanel(actualWidth, actualHeight, 4);
+        CustomPanel panel = new CustomPanel(actualWidth, actualHeight, 8);
         frame.setBounds(0, 0, width, height);
 
         frame.add(panel);
         frame.setVisible(true);
         frame.setFocusable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        Sphere sphere = new Sphere(new Point3D(0, -100, 300), 300);
-        YPlane plane = new YPlane(-400);
         
         for(int x = 0; x < panel.unscaledWidth; x++)
         {
@@ -86,4 +88,21 @@ public class Main
         	panel.repaint();
         }
 	}
+	
+	public static HitInfo GetFirstHitObject(Ray ray)
+	{
+		HitInfo closestHit = new HitInfo(false, null, Double.MAX_VALUE);
+		
+		for(int i = 0; i < renderedObjects.length; i++)
+		{
+			double intersection = renderedObjects[i].getIntersectionValue(ray);
+			
+			if(intersection != Ray.NO_INTERSECTION && intersection < closestHit.tValue)
+			{
+				closestHit = new HitInfo(true, renderedObjects[i], intersection);
+			}
+		}
+		
+		return closestHit;
+	}	
 }
