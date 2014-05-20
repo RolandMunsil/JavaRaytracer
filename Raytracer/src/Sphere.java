@@ -1,23 +1,24 @@
 import java.awt.Color;
 
 
-public class Sphere implements Renderable
+public class Sphere extends Renderable
 {
+	private Color color;
 	Point3D center;
 	double radius;
 	
-	public Sphere(Point3D center, double radius)
+	public Sphere(Color color, Point3D center, double radius, double reflectivity)
 	{
+		this.color = color;
 		this.center = center;
 		this.radius = radius;
+		this.reflectivity = reflectivity;
 	}
 	
 	@Override
 	public Color getColorAt(Point3D point) 
 	{
-		//Vector3D vectorFromCenter = Point3D.Subtract(point, center);
-		
-		return Color.BLUE;
+		return color;
 	}
 	
 	@Override

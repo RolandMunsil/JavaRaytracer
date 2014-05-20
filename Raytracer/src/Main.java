@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -11,10 +12,12 @@ public class Main
 	static int actualHeight = height - 38;
 	
 	public static final Color SKY_COLOR = new Color(154, 206, 235);
+	public static final int MAX_REFLECTIONS = 10;
+	public static final int ANTIALIASING_AMOUNT = 1;
 	
-	public static Sphere sphere = new Sphere(new Point3D(350, -300, 600), 300);
-	public static Sphere sphere2 = new Sphere(new Point3D(-350, -300, 600), 300);
-	public static YPlane plane = new YPlane(-500);
+	public static Sphere sphere = new Sphere(Color.BLACK, new Point3D(350, -200, 600), 300, .5);
+	public static Sphere sphere2 = new Sphere(Color.WHITE, new Point3D(-350, -200, 600), 300, .5);
+	public static YPlane plane = new YPlane(-500, 0);
 	
 	public static Renderable[] renderedObjects = { sphere, plane, sphere2 };
 	
@@ -22,7 +25,7 @@ public class Main
 	{
 		JFrame frame = new JFrame("3D Parametric Equation");
 
-        CustomPanel panel = new CustomPanel(actualWidth, actualHeight, 8);
+        CustomPanel panel = new CustomPanel(actualWidth, actualHeight, ANTIALIASING_AMOUNT);
         frame.setBounds(0, 0, width, height);
 
         frame.add(panel);
@@ -43,12 +46,14 @@ public class Main
         		//This is so that positive y will be upwards instead of downwards
         		adjY *= -1;
         		
+        		Random random = new Random();
+        		
         		Point3D origin = new Point3D(adjX, adjY, 0);
         		Vector3D direction = new Vector3D(adjX / 900, adjY / 900, 1);
         		
         		Ray ray = new Ray(direction, origin);
         		
-        		Color color = GetColorAt(ray, null, 500);
+        		Color color = GetColorAt(ray, null, MAX_REFLECTIONS);
 
         		panel.setPixel(x, y, color);
             }
@@ -97,8 +102,7 @@ public class Main
 				
 				Color reflectionColor = GetColorAt(reflectRay, hitInfo.hitObject, maxReflections - 1);
 				
-				//This is doing something wrong with the colors
-				color = LinearInterpolate(color, reflectionColor, .5);
+				color = LinearInterpolate(color, reflectionColor, hitInfo.hitObject.reflectivity);
 			}
 		}
 		

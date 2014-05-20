@@ -1,12 +1,13 @@
 import java.awt.Color;
 
-public class YPlane implements Renderable 
+public class YPlane extends Renderable 
 {
 	double yValue;
 	
-	public YPlane(double yValue)
+	public YPlane(double yValue, double reflectivity)
 	{
 		this.yValue = yValue;
+		this.reflectivity = reflectivity;
 	}
 	
 	@Override
@@ -36,7 +37,7 @@ public class YPlane implements Renderable
 	{
 		//Solve when yEqn = yValue;
 		double tValue = (yValue - ray.yEquation.constant) / ray.yEquation.coefficient;
-		if(tValue >= 0)
+		if(tValue >= 0 /*&& Math.abs(ray.GetPointAt(tValue).x) < 100*/)
 		{
 			return tValue;
 		}

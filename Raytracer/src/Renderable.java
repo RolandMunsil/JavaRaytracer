@@ -1,8 +1,10 @@
 import java.awt.Color;
 
-public interface Renderable 
+public abstract class Renderable 
 {
-	public Color getColorAt(Point3D point);
-	public Vector3D getNormalVectorAt(Point3D point);
-	public double getIntersectionValue(Ray ray);
+	public double reflectivity;
+	
+	public abstract Color getColorAt(Point3D point);
+	public abstract Vector3D getNormalVectorAt(Point3D point);
+	public abstract double getIntersectionValue(Ray ray);
 }
