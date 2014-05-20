@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 
@@ -9,10 +10,13 @@ public class Main
 	static int actualWidth = width - 16;
 	static int actualHeight = height - 38;
 	
-	public static Sphere sphere = new Sphere(new Point3D(0, -100, 300), 300);
-	public static YPlane plane = new YPlane(-400);
+	public static final Color SKY_COLOR = new Color(154, 206, 235);
 	
-	public static Renderable[] renderedObjects = { sphere, plane };
+	public static Sphere sphere = new Sphere(new Point3D(350, -300, 600), 300);
+	public static Sphere sphere2 = new Sphere(new Point3D(-350, -300, 600), 300);
+	public static YPlane plane = new YPlane(-500);
+	
+	public static Renderable[] renderedObjects = { sphere, plane, sphere2 };
 	
 	public static void main(String[] args) 
 	{
@@ -40,61 +44,29 @@ public class Main
         		adjY *= -1;
         		
         		Point3D origin = new Point3D(adjX, adjY, 0);
-        		Vector3D direction = new Vector3D(adjX / 600, adjY / 600, 1);
+        		Vector3D direction = new Vector3D(adjX / 900, adjY / 900, 1);
         		
         		Ray ray = new Ray(direction, origin);
         		
-        		double tValSphere = sphere.getIntersectionValue(ray);
-        		double tValPlane = plane.getIntersectionValue(ray);
-        		
-        		Color color = new Color(154, 206, 235);
-        		if(tValPlane != Ray.NO_INTERSECTION && tValSphere != Ray.NO_INTERSECTION)
-        		{
-        			if(tValPlane < tValSphere)
-        			{
-        				color = plane.getColorAt(ray.GetPointAt(tValPlane));
-        			}
-        			else
-        			{
-        				Point3D hitPoint = ray.GetPointAt(tValSphere);
-        				color = sphere.getColorAt(hitPoint);
-        				
-        				Vector3D reflectVector = direction.GetReflected(sphere.getNormalVectorAt(hitPoint));
-            			Ray reflectRay = new Ray(reflectVector, hitPoint);
-            			
-            			Color color2 = new Color(154, 206, 235);
-            			double tValPlane2 = plane.getIntersectionValue(reflectRay);
-            			if(tValPlane2 != Ray.NO_INTERSECTION)
-            			{
-            				color2 = plane.getColorAt(reflectRay.GetPointAt(tValPlane2));
-            			}
-            			color = color2;
-        			}
-        		}
-        		else if (tValPlane != Ray.NO_INTERSECTION && tValSphere == Ray.NO_INTERSECTION)
-        		{
-        			color = plane.getColorAt(ray.GetPointAt(tValPlane));
-        		}
-        		else if (tValPlane == Ray.NO_INTERSECTION && tValSphere != Ray.NO_INTERSECTION)
-        		{
-        			color = sphere.getColorAt(ray.GetPointAt(tValSphere));
-        		}
-        		else if (tValPlane == Ray.NO_INTERSECTION && tValSphere == Ray.NO_INTERSECTION)
-        		{
-        			//No intersection, Do nothing
-        		}
+        		Color color = GetColorAt(ray, null, 500);
+
         		panel.setPixel(x, y, color);
             }
         	panel.repaint();
         }
 	}
 	
-	public static HitInfo GetFirstHitObject(Ray ray)
+	public static HitInfo GetFirstHitObject(Ray ray, Renderable objToIgnore)
 	{
 		HitInfo closestHit = new HitInfo(false, null, Double.MAX_VALUE);
 		
 		for(int i = 0; i < renderedObjects.length; i++)
 		{
+			if(renderedObjects[i] == objToIgnore)
+			{
+				continue;
+			}
+			
 			double intersection = renderedObjects[i].getIntersectionValue(ray);
 			
 			if(intersection != Ray.NO_INTERSECTION && intersection < closestHit.tValue)
@@ -105,4 +77,41 @@ public class Main
 		
 		return closestHit;
 	}	
+	
+	public static Color GetColorAt(Ray ray, Renderable objToIgnore, int maxReflections)
+	{
+		//Set to default
+		Color color = SKY_COLOR;
+		
+		HitInfo hitInfo = GetFirstHitObject(ray, objToIgnore);
+		if(hitInfo.didHit)
+		{
+			Point3D hitPoint = ray.GetPointAt(hitInfo.tValue);
+			
+			color = hitInfo.hitObject.getColorAt(hitPoint);
+			
+			if(maxReflections > 0)
+			{
+				Vector3D reflectVector = ray.ToVector3D().GetReflected(hitInfo.hitObject.getNormalVectorAt(hitPoint));
+				Ray reflectRay = new Ray(reflectVector, hitPoint);
+				
+				Color reflectionColor = GetColorAt(reflectRay, hitInfo.hitObject, maxReflections - 1);
+				
+				//This is doing something wrong with the colors
+				color = LinearInterpolate(color, reflectionColor, .5);
+			}
+		}
+		
+		return color;
+	}
+
+	public static Color LinearInterpolate(Color color1, Color color2, double interpAmount)
+	{
+		double reverseInterpAmount = 1 - interpAmount;
+		return new Color(
+				(int)((color1.getRed() * reverseInterpAmount) + (color2.getRed() * interpAmount)),
+				(int)((color1.getGreen() * reverseInterpAmount) + (color2.getGreen() * interpAmount)),
+				(int)((color1.getBlue() * reverseInterpAmount) + (color2.getBlue() * interpAmount))
+				); 
+	}
 }

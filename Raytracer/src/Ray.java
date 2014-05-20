@@ -27,4 +27,9 @@ public class Ray
 				yEquation.GetValueAt(tValue),
 				zEquation.GetValueAt(tValue));
 	}
+	
+	public Vector3D ToVector3D()
+	{
+		return new Vector3D(xEquation.coefficient, yEquation.coefficient, zEquation.coefficient);
+	}
 }
