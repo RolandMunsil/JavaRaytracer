@@ -6,18 +6,20 @@ import javax.swing.JFrame;
 
 public class Main 
 {
-	static int width = 1680;
-	static int height = 1050;
+	static int width = 1280;
+	static int height = 720;
 	static int actualWidth = width - 16;
 	static int actualHeight = height - 38;
 	
 	public static final Color SKY_COLOR = new Color(154, 206, 235);
-	public static final int MAX_REFLECTIONS = 10;
-	public static final int ANTIALIASING_AMOUNT = 1;
+	public static final int MAX_REFLECTIONS = 20;
+	public static final int ANTIALIASING_AMOUNT = 4;
+	public static final double ZOOM = 1.0;
+	public static final double RAY_DIR_MULTIPLIER = 1.0 / 600.0; //Sort of like FOV
 	
 	public static Sphere sphere = new Sphere(Color.BLACK, new Point3D(350, -200, 600), 300, .5);
 	public static Sphere sphere2 = new Sphere(Color.WHITE, new Point3D(-350, -200, 600), 300, .5);
-	public static YPlane plane = new YPlane(-500, 0);
+	public static YPlane plane = new YPlane(-800, 0);
 	
 	public static Renderable[] renderedObjects = { sphere, plane, sphere2 };
 	
@@ -46,10 +48,8 @@ public class Main
         		//This is so that positive y will be upwards instead of downwards
         		adjY *= -1;
         		
-        		Random random = new Random();
-        		
-        		Point3D origin = new Point3D(adjX, adjY, 0);
-        		Vector3D direction = new Vector3D(adjX / 900, adjY / 900, 1);
+        		Point3D origin = new Point3D(adjX * (1.0 / ZOOM), adjY * (1.0 / ZOOM), 0);
+        		Vector3D direction = new Vector3D(adjX * RAY_DIR_MULTIPLIER, adjY * RAY_DIR_MULTIPLIER, 1);
         		
         		Ray ray = new Ray(direction, origin);
         		
@@ -57,7 +57,11 @@ public class Main
 
         		panel.setPixel(x, y, color);
             }
-        	panel.repaint();
+        	
+        	if(x % (100 * ANTIALIASING_AMOUNT) == 0)
+        	{
+        		panel.repaint();
+        	}
         }
 	}
 	
