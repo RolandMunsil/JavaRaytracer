@@ -14,6 +14,11 @@ public class LinearEquation
 		return (coefficient * tValue) + constant;
 	}
 	
+	public double SolveWhenSetEqualTo(double value)
+	{
+		return (value - constant) / coefficient;
+	}
+	
 	public static LinearEquation Add(LinearEquation eqn1, LinearEquation eqn2)
 	{
 		return new LinearEquation(eqn1.coefficient + eqn2.coefficient, eqn1.constant + eqn2.constant);
@@ -30,5 +35,6 @@ public class LinearEquation
 				eqn1.coefficient * eqn2.coefficient,
 				(eqn1.coefficient * eqn2.constant) + (eqn2.coefficient * eqn1.constant),
 				eqn1.constant * eqn2.constant);
+		
 	}
 }

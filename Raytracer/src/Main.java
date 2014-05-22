@@ -13,7 +13,7 @@ public class Main
 	
 	public static final Color SKY_COLOR = new Color(154, 206, 235);
 	public static final int MAX_REFLECTIONS = 16;
-	public static final int ANTIALIASING_AMOUNT = 4;
+	public static final int ANTIALIASING_AMOUNT = 1;
 	public static final double ZOOM = 1;
 	public static final double FOCAL_LENGTH = 900.0; //Sort of like FOV
 	
@@ -23,7 +23,9 @@ public class Main
 	public static Sphere sphere2 = new Sphere(Color.WHITE, new Point3D(-350, -200, 600), 300, .5);
 	public static YPlane plane = new YPlane(-800, 0);
 	
-	public static Renderable[] renderedObjects = { sphere, plane, sphere2 };
+	public static Cuboid cube = new Cuboid(new Point3D(400, 0, 300), 200, 200, 200, Color.RED, .5);
+	
+	public static Renderable[] renderedObjects = { sphere, plane, sphere2, cube };
 	
 	public static void main(String[] args) 
 	{

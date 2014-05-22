@@ -36,7 +36,7 @@ public class YPlane extends Renderable
 	public double getIntersectionValue(Ray ray) 
 	{
 		//Solve when yEqn = yValue;
-		double tValue = (yValue - ray.yEquation.constant) / ray.yEquation.coefficient;
+		double tValue = ray.yEquation.SolveWhenSetEqualTo(yValue);
 		if(tValue >= 0 /*&& Math.abs(ray.GetPointAt(tValue).x) < 100*/)
 		{
 			return tValue;
