@@ -12,10 +12,12 @@ public class Main
 	static int actualHeight = height - 38;
 	
 	public static final Color SKY_COLOR = new Color(154, 206, 235);
-	public static final int MAX_REFLECTIONS = 20;
+	public static final int MAX_REFLECTIONS = 16;
 	public static final int ANTIALIASING_AMOUNT = 4;
-	public static final double ZOOM = 1.0;
-	public static final double RAY_DIR_MULTIPLIER = 1.0 / 600.0; //Sort of like FOV
+	public static final double ZOOM = 1;
+	public static final double FOCAL_LENGTH = 900.0; //Sort of like FOV
+	
+	public static Camera camera = new Camera(new Point3D(0, 0, 0), 0, 0);
 	
 	public static Sphere sphere = new Sphere(Color.BLACK, new Point3D(350, -200, 600), 300, .5);
 	public static Sphere sphere2 = new Sphere(Color.WHITE, new Point3D(-350, -200, 600), 300, .5);
@@ -25,7 +27,7 @@ public class Main
 	
 	public static void main(String[] args) 
 	{
-		JFrame frame = new JFrame("3D Parametric Equation");
+		JFrame frame = new JFrame("Ray Tracer");
 
         CustomPanel panel = new CustomPanel(actualWidth, actualHeight, ANTIALIASING_AMOUNT);
         frame.setBounds(0, 0, width, height);
@@ -49,7 +51,10 @@ public class Main
         		adjY *= -1;
         		
         		Point3D origin = new Point3D(adjX * (1.0 / ZOOM), adjY * (1.0 / ZOOM), 0);
-        		Vector3D direction = new Vector3D(adjX * RAY_DIR_MULTIPLIER, adjY * RAY_DIR_MULTIPLIER, 1);
+        		origin = Point3D.Add(origin, camera.center);
+        		origin = camera.GetAdjustedForCameraRotation(origin);
+        		
+        		Vector3D direction = camera.GetAdjustedForCameraRotation(new Vector3D(adjX * (1 / FOCAL_LENGTH), adjY * (1 / FOCAL_LENGTH), 1));
         		
         		Ray ray = new Ray(direction, origin);
         		
@@ -57,11 +62,7 @@ public class Main
 
         		panel.setPixel(x, y, color);
             }
-        	
-        	if(x % (100 * ANTIALIASING_AMOUNT) == 0)
-        	{
-        		panel.repaint();
-        	}
+        	panel.repaint();
         }
 	}
 	
@@ -102,6 +103,13 @@ public class Main
 			if(maxReflections > 0)
 			{
 				Vector3D reflectVector = ray.ToVector3D().GetReflected(hitInfo.hitObject.getNormalVectorAt(hitPoint));
+				
+				//double size = .25;
+				//
+				//reflectVector.x += (Math.random() * size) - size / 2;
+				//reflectVector.y += (Math.random() * size) - size / 2;
+				//reflectVector.z += (Math.random() * size) - size / 2;
+				
 				Ray reflectRay = new Ray(reflectVector, hitPoint);
 				
 				Color reflectionColor = GetColorAt(reflectRay, hitInfo.hitObject, maxReflections - 1);

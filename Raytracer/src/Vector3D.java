@@ -31,6 +31,10 @@ public class Vector3D
 				);
 	}
 	
+	public Point3D ToPoint3D()
+	{
+		return new Point3D(x, y, z);
+	}
 	
 	public double GetLength()
 	{
