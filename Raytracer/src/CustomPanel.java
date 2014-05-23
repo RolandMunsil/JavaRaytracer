@@ -46,36 +46,7 @@ public class CustomPanel extends JPanel
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         
-        BufferedImage scaledDown = new BufferedImage(displayWidth, displayHeight, BufferedImage.TYPE_INT_ARGB);
-        
-        for(int x = 0; x < displayWidth; x++)
-        {
-        	for(int y = 0; y < displayHeight; y++)
-            {
-        		int RSum = 0;
-        		int GSum = 0;
-        		int BSum = 0;
-        		
-        		for(int subX = 0; subX < antialiasingAmount; subX++)
-        		{
-        			for(int subY = 0; subY < antialiasingAmount; subY++)
-            		{
-        				int color = canvas.getRGB((x * antialiasingAmount)  + subX, (y * antialiasingAmount) + subY);
-        				RSum += (color & 0x00FF0000) >> 16;
-        				GSum += (color & 0x0000FF00) >> 8;
-        				BSum += (color & 0x000000FF);
-            		}
-        		}
-        		
-        		int averagedColor = 0xFF000000 |
-        				((RSum / (antialiasingAmount * antialiasingAmount)) << 16) |
-        				((GSum / (antialiasingAmount * antialiasingAmount)) << 8) |
-        				((BSum / (antialiasingAmount * antialiasingAmount)));
-        		
-        		scaledDown.setRGB(x, y, averagedColor);
-            }
-        }
-        
+        BufferedImage scaledDown = GenerateScaledDownScreen();
         g2.drawImage(scaledDown, null, null);
     }
     
@@ -106,8 +77,48 @@ public class CustomPanel extends JPanel
     	}
     }
     
-    public void SaveScreenToFile(String path) throws IOException
+    public BufferedImage GenerateScaledDownScreen()
+    {
+    	BufferedImage scaledDown = new BufferedImage(displayWidth, displayHeight, BufferedImage.TYPE_INT_ARGB);
+        
+        for(int x = 0; x < displayWidth; x++)
+        {
+        	for(int y = 0; y < displayHeight; y++)
+            {
+        		int RSum = 0;
+        		int GSum = 0;
+        		int BSum = 0;
+        		
+        		for(int subX = 0; subX < antialiasingAmount; subX++)
+        		{
+        			for(int subY = 0; subY < antialiasingAmount; subY++)
+            		{
+        				int color = canvas.getRGB((x * antialiasingAmount)  + subX, (y * antialiasingAmount) + subY);
+        				RSum += (color & 0x00FF0000) >> 16;
+        				GSum += (color & 0x0000FF00) >> 8;
+        				BSum += (color & 0x000000FF);
+            		}
+        		}
+        		
+        		int averagedColor = 0xFF000000 |
+        				((RSum / (antialiasingAmount * antialiasingAmount)) << 16) |
+        				((GSum / (antialiasingAmount * antialiasingAmount)) << 8) |
+        				((BSum / (antialiasingAmount * antialiasingAmount)));
+        		
+        		scaledDown.setRGB(x, y, averagedColor);
+            }
+        }
+        
+        return scaledDown;
+    }
+    
+    public void SaveUnscaledScreen(String path) throws IOException
     {
     	ImageIO.write(canvas, "png", new File(path));
+    }
+    
+    public void SaveScaledDownScreen(String path) throws IOException
+    {
+    	ImageIO.write(GenerateScaledDownScreen(), "png", new File(path));
     }
 }

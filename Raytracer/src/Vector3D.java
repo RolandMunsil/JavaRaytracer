@@ -31,6 +31,15 @@ public class Vector3D
 				);
 	}
 	
+	public static Vector3D Add(Vector3D vector1, Vector3D vector2)
+	{
+		return new Vector3D(
+				vector1.x + vector2.x,
+				vector1.y + vector2.y,
+				vector1.z + vector2.z
+				);
+	}
+	
 	public Point3D ToPoint3D()
 	{
 		return new Point3D(x, y, z);
@@ -54,5 +63,28 @@ public class Vector3D
 		Vector3D dunno = Multiply(Multiply(normalizedNormal, 2), dotProduct);
 		
 		return Subtract(this, dunno);
+	}
+	
+	//http://en.wikipedia.org/wiki/Snell's_law#Vector_form
+	public Vector3D GetRefracted(Vector3D surfaceNormal, double refractIndexFrom, double refractIndexTo)
+	{	
+		Vector3D negNormal = new Vector3D(-surfaceNormal.x, -surfaceNormal.y, -surfaceNormal.z);
+		
+		double cos1 = Vector3D.DotProduct(this, negNormal);
+		if(cos1 < 0)
+		{
+			int k = 1 / 0;
+		}
+		
+		double refractRatio = refractIndexFrom / refractIndexTo;
+		double otherSine = refractRatio * Math.sqrt(1 - (cos1 * cos1));
+		double cos2 = Math.sqrt(1 - (otherSine * otherSine));
+		
+		double nMult = (refractRatio * cos1) - cos2;
+		
+		return Vector3D.Add(
+				Vector3D.Multiply(this, refractRatio), 
+				Vector3D.Multiply(surfaceNormal, nMult)
+				);
 	}
 }

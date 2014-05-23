@@ -17,15 +17,24 @@ public class Main
 	public static final double ZOOM = 1;
 	public static final double FOCAL_LENGTH = 900.0; //Sort of like FOV
 	
-	public static Camera camera = new Camera(new Point3D(0, 0, 0), 0, 0);
+	public static Camera camera = new Camera(new Point3D(0, 0, -800), 0, 0);
 	
-	public static Sphere sphere = new Sphere(Color.BLACK, new Point3D(350, -200, 600), 300, .5);
-	public static Sphere sphere2 = new Sphere(Color.WHITE, new Point3D(-350, -200, 600), 300, .5);
+	/*
+	public static Sphere sphere = new Sphere(Color.BLACK, new Point3D(350, -200, 0), 300, .5);
+	public static Sphere sphere2 = new Sphere(Color.WHITE, new Point3D(-350, -200, 0), 300, .5);
 	public static YPlane plane = new YPlane(-800, 0);
 	
-	public static Cuboid cube = new Cuboid(new Point3D(400, 0, 300), 200, 200, 200, Color.RED, .5);
+	public static Cuboid cube = new Cuboid(new Point3D(400, 0, -300), 200, 200, 200, Color.RED, .5);
 	
 	public static Renderable[] renderedObjects = { sphere, plane, sphere2, cube };
+	*/
+	
+	public static YPlane plane = new YPlane(-700, 0);
+	public static Cuboid largeCube = new Cuboid(new Point3D(0, 0, 0), 400, 400, 400, Color.BLACK, .7);
+	public static Sphere surroundingSphere = new Sphere(Color.DARK_GRAY, new Point3D(0, 0, 0), 1200, .4);
+	
+	
+	public static Renderable[] renderedObjects = { largeCube, surroundingSphere, plane };
 	
 	public static void main(String[] args) 
 	{
@@ -39,32 +48,57 @@ public class Main
         frame.setFocusable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        for(int x = 0; x < panel.unscaledWidth; x++)
+        int totalFrames = 120;
+        
+        for(int frameNum = 0; frameNum < totalFrames; frameNum++)
         {
-        	for(int y = 0; y < panel.unscaledHeight; y++)
-            {
-        		double adjX = x - (panel.unscaledWidth / 2);
-        		double adjY = y - (panel.unscaledHeight / 2);
-        		
-        		adjX /= panel.antialiasingAmount;
-        		adjY /= panel.antialiasingAmount;
-        		
-        		//This is so that positive y will be upwards instead of downwards
-        		adjY *= -1;
-        		
-        		Point3D origin = new Point3D(adjX * (1.0 / ZOOM), adjY * (1.0 / ZOOM), 0);
-        		origin = Point3D.Add(origin, camera.center);
-        		origin = camera.GetAdjustedForCameraRotation(origin);
-        		
-        		Vector3D direction = camera.GetAdjustedForCameraRotation(new Vector3D(adjX * (1 / FOCAL_LENGTH), adjY * (1 / FOCAL_LENGTH), 1));
-        		
-        		Ray ray = new Ray(direction, origin);
-        		
-        		Color color = GetColorAt(ray, null, MAX_REFLECTIONS);
-
-        		panel.setPixel(x, y, color);
-            }
-        	panel.repaint();
+        	double angleHoriz = -((frameNum / (double)totalFrames) * Math.PI * 2);
+        	double angleVert = -((frameNum / (double)totalFrames) * (Math.PI / 4));
+        	
+        	camera.angleHoriz = angleHoriz;
+        	camera.angleVert = angleVert;
+        	
+        	camera.center = new Point3D(0, 0, 0);
+        	Point3D point = camera.GetAdjustedForCameraRotation(new Point3D(0, 0, 800));
+        	camera.center = new Point3D(-point.x, -point.y, -point.z);
+        	
+        	panel.clearPanel(0xFFFFFFFF);
+        	
+	        for(int x = 0; x < panel.unscaledWidth; x++)
+	        {
+	        	for(int y = 0; y < panel.unscaledHeight; y++)
+	            {
+	        		double adjX = x - (panel.unscaledWidth / 2);
+	        		double adjY = y - (panel.unscaledHeight / 2);
+	        		
+	        		adjX /= panel.antialiasingAmount;
+	        		adjY /= panel.antialiasingAmount;
+	        		
+	        		//This is so that positive y will be upwards instead of downwards
+	        		adjY *= -1;
+	        		
+	        		Point3D origin = new Point3D(adjX * (1.0 / ZOOM), adjY * (1.0 / ZOOM), 0);
+	        		origin = Point3D.Add(origin, camera.center);
+	        		origin = camera.GetAdjustedForCameraRotation(origin);
+	        		
+	        		Vector3D direction = camera.GetAdjustedForCameraRotation(new Vector3D(adjX * (1 / FOCAL_LENGTH), adjY * (1 / FOCAL_LENGTH), 1));
+	        		
+	        		Ray ray = new Ray(direction, origin);
+	        		
+	        		Color color = GetColorAt(ray, null, MAX_REFLECTIONS);
+	
+	        		panel.setPixel(x, y, color);
+	            }
+	        	panel.repaint();
+	        }
+	        panel.repaint();
+	        
+	        try {
+				panel.SaveScaledDownScreen("C:\\Users\\Roland\\Desktop\\JavaRaytracer Renders\\image" + String.format("%03d", frameNum + 1) + ".png");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
 	}
 	
