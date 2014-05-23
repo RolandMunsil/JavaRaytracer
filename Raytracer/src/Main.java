@@ -13,9 +13,9 @@ public class Main
 	
 	public static final Color SKY_COLOR = new Color(154, 206, 235);
 	public static final int MAX_REFLECTIONS = 16;
-	public static final int ANTIALIASING_AMOUNT = 1;
+	public static final int ANTIALIASING_AMOUNT = 4;
 	public static final double ZOOM = 1;
-	public static final double FOCAL_LENGTH = 900.0; //Sort of like FOV
+	public static final double FOCAL_LENGTH = 700.0; //Sort of like FOV
 	
 	public static Camera camera = new Camera(new Point3D(0, 0, -800), 0, 0);
 	
@@ -29,12 +29,12 @@ public class Main
 	public static Renderable[] renderedObjects = { sphere, plane, sphere2, cube };
 	*/
 	
-	public static YPlane plane = new YPlane(-700, 0);
+	public static YPlane plane = new YPlane(-800, .5);
 	public static Cuboid largeCube = new Cuboid(new Point3D(0, 0, 0), 400, 400, 400, Color.BLACK, .7);
-	public static Sphere surroundingSphere = new Sphere(Color.DARK_GRAY, new Point3D(0, 0, 0), 1200, .4);
+	public static Sphere rotatingSphere = new Sphere(Color.GRAY, new Point3D(0, 0, -600), 75, .6);
 	
 	
-	public static Renderable[] renderedObjects = { largeCube, surroundingSphere, plane };
+	public static Renderable[] renderedObjects = { largeCube, rotatingSphere, plane };
 	
 	public static void main(String[] args) 
 	{
@@ -48,12 +48,12 @@ public class Main
         frame.setFocusable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        int totalFrames = 120;
+        int totalFrames = 900;
         
         for(int frameNum = 0; frameNum < totalFrames; frameNum++)
         {
-        	double angleHoriz = -((frameNum / (double)totalFrames) * Math.PI * 2);
-        	double angleVert = -((frameNum / (double)totalFrames) * (Math.PI / 4));
+        	double angleHoriz = -((frameNum / 200.0) * Math.PI * 2);
+        	double angleVert = -(Math.PI / 4) * Math.sin((frameNum / 240.0) * Math.PI * 2);
         	
         	camera.angleHoriz = angleHoriz;
         	camera.angleVert = angleVert;
@@ -61,6 +61,8 @@ public class Main
         	camera.center = new Point3D(0, 0, 0);
         	Point3D point = camera.GetAdjustedForCameraRotation(new Point3D(0, 0, 800));
         	camera.center = new Point3D(-point.x, -point.y, -point.z);
+        	
+        	rotatingSphere.center = Utils.RotatePointAroundPoint(new Point3D(0, 0, 0), new Point3D(0, 0, -600), frameNum / 45.0, Math.sin(frameNum / 45.0));
         	
         	panel.clearPanel(0xFFFFFFFF);
         	
@@ -89,7 +91,7 @@ public class Main
 	
 	        		panel.setPixel(x, y, color);
 	            }
-	        	panel.repaint();
+	        	//panel.repaint();
 	        }
 	        panel.repaint();
 	        

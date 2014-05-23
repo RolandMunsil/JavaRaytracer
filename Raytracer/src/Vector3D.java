@@ -66,7 +66,7 @@ public class Vector3D
 	}
 	
 	//http://en.wikipedia.org/wiki/Snell's_law#Vector_form
-	public Vector3D GetRefracted(Vector3D surfaceNormal, double refractIndexFrom, double refractIndexTo)
+	public RefractionInfo GetRefracted(Vector3D surfaceNormal, double refractIndexFrom, double refractIndexTo)
 	{	
 		Vector3D negNormal = new Vector3D(-surfaceNormal.x, -surfaceNormal.y, -surfaceNormal.z);
 		
@@ -78,13 +78,23 @@ public class Vector3D
 		
 		double refractRatio = refractIndexFrom / refractIndexTo;
 		double otherSine = refractRatio * Math.sqrt(1 - (cos1 * cos1));
-		double cos2 = Math.sqrt(1 - (otherSine * otherSine));
 		
-		double nMult = (refractRatio * cos1) - cos2;
-		
-		return Vector3D.Add(
-				Vector3D.Multiply(this, refractRatio), 
-				Vector3D.Multiply(surfaceNormal, nMult)
-				);
+		if(otherSine > 1)
+		{
+			//Total internal reflection
+			return new RefractionInfo(true, GetReflected(surfaceNormal));
+		}
+		else
+		{
+			double cos2 = Math.sqrt(1 - (otherSine * otherSine));
+			
+			double nMult = (refractRatio * cos1) - cos2;
+			
+			return new RefractionInfo(false,
+					Vector3D.Add(
+							Vector3D.Multiply(this, refractRatio), 
+							Vector3D.Multiply(surfaceNormal, nMult)
+							));
+		}
 	}
 }

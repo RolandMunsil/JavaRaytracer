@@ -65,22 +65,17 @@ public class Sphere extends Renderable
 		double higherZero = (-b + Math.sqrt(numToSqrt))/(2 * a);
 		double lowerZero = (-b - Math.sqrt(numToSqrt))/(2 * a);
 		
-		if(higherZero < 0 && lowerZero < 0)
+		if(higherZero <= 0 && lowerZero <= 0)
 		{
 			return Ray.NO_INTERSECTION;
 		}
-		else if (lowerZero < 0)
+		else if (lowerZero <= 0)
 		{
 			return higherZero;
 		}
-		else if (lowerZero >= 0)
-		{
-			return lowerZero;
-		}
 		else
 		{
-			//This should never be executed
-			return -2;
+			return lowerZero;
 		}
 	}
 
