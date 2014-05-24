@@ -87,14 +87,14 @@ public class Vector3D
 		else
 		{
 			double cos2 = Math.sqrt(1 - (otherSine * otherSine));
-			
 			double nMult = (refractRatio * cos1) - cos2;
 			
 			return new RefractionInfo(false,
 					Vector3D.Add(
 							Vector3D.Multiply(this, refractRatio), 
 							Vector3D.Multiply(surfaceNormal, nMult)
-							));
+							)
+						);
 		}
 	}
 }

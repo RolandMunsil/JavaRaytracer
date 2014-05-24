@@ -13,11 +13,12 @@ public class Main
 	
 	public static final Color SKY_COLOR = new Color(154, 206, 235);
 	public static final int MAX_REFLECTIONS = 16;
-	public static final int ANTIALIASING_AMOUNT = 4;
-	public static final double ZOOM = 1;
-	public static final double FOCAL_LENGTH = 700.0; //Sort of like FOV
+	public static final int ANTIALIASING_AMOUNT = 1;
+	public static double ZOOM = 1;
+	public static double CAMERA_SIZE = 1 * ZOOM;
+	public static double FOCAL_LENGTH = 700.0 * ZOOM; //Sort of like FOV
 	
-	public static Camera camera = new Camera(new Point3D(0, 0, -800), 0, 0);
+	public static Camera camera = new Camera(new Point3D(1000, 1000, -1000), -Math.PI / 4, -Math.PI / 4);
 	
 	/*
 	public static Sphere sphere = new Sphere(Color.BLACK, new Point3D(350, -200, 0), 300, .5);
@@ -29,12 +30,17 @@ public class Main
 	public static Renderable[] renderedObjects = { sphere, plane, sphere2, cube };
 	*/
 	
-	public static YPlane plane = new YPlane(-800, .5);
+	public static YPlane plane = new YPlane(-450, .5);
 	public static Cuboid largeCube = new Cuboid(new Point3D(0, 0, 0), 400, 400, 400, Color.BLACK, .7);
+	public static Hyperbola hyperbola = new Hyperbola(Color.BLACK, new Point3D(0, 400, 0), 200, .5);
+	
 	public static Sphere rotatingSphere = new Sphere(Color.GRAY, new Point3D(0, 0, -600), 75, .6);
 	
+	public static Renderable[] renderedObjects = { hyperbola, rotatingSphere, plane };
 	
-	public static Renderable[] renderedObjects = { largeCube, rotatingSphere, plane };
+	public static Light aLight = new Light(new Point3D(0, 900, 0), 2000, 1);
+	
+	public static Light[] lights = { aLight };
 	
 	public static void main(String[] args) 
 	{
@@ -64,7 +70,7 @@ public class Main
         	
         	rotatingSphere.center = Utils.RotatePointAroundPoint(new Point3D(0, 0, 0), new Point3D(0, 0, -600), frameNum / 45.0, Math.sin(frameNum / 45.0));
         	
-        	panel.clearPanel(0xFFFFFFFF);
+        	//panel.clearPanel(0xFFFFFFFF);
         	
 	        for(int x = 0; x < panel.unscaledWidth; x++)
 	        {
@@ -79,7 +85,7 @@ public class Main
 	        		//This is so that positive y will be upwards instead of downwards
 	        		adjY *= -1;
 	        		
-	        		Point3D origin = new Point3D(adjX * (1.0 / ZOOM), adjY * (1.0 / ZOOM), 0);
+	        		Point3D origin = new Point3D(adjX * (1.0 / CAMERA_SIZE), adjY * (1.0 / CAMERA_SIZE), 0);
 	        		origin = Point3D.Add(origin, camera.center);
 	        		origin = camera.GetAdjustedForCameraRotation(origin);
 	        		
@@ -91,7 +97,7 @@ public class Main
 	
 	        		panel.setPixel(x, y, color);
 	            }
-	        	//panel.repaint();
+	        	panel.repaint();
 	        }
 	        panel.repaint();
 	        
@@ -153,10 +159,52 @@ public class Main
 				Color reflectionColor = GetColorAt(reflectRay, hitInfo.hitObject, maxReflections - 1);
 				
 				color = LinearInterpolate(color, reflectionColor, hitInfo.hitObject.reflectivity);
+				
+				
 			}
+			
+			//Adjust for light
+			
+			double lightLevel = GetLightLevelAt(ray.GetPointAt(hitInfo.tValue), hitInfo.hitObject);
+			
+			int newR = (int) (color.getRed() * lightLevel);
+			int newG = (int) (color.getGreen() * lightLevel);
+			int newB = (int) (color.getBlue() * lightLevel);
+			
+			if(newR > 255) newR = 255;
+			if(newG > 255) newG = 255;
+			if(newB > 255) newB = 255;
+			
+			color = new Color(newR, newG, newB);
+			
 		}
 		
 		return color;
+	}
+	
+	public static double GetLightLevelAt(Point3D point, Renderable associatedObj)
+	{
+		//Default light level
+		double lightLevel = 0;
+		
+		for(Light light : lights)
+		{
+			Ray lightRay = new Ray(light.center, point);
+			
+			HitInfo info = GetFirstHitObject(lightRay, associatedObj);
+			
+			//First check if there is anything in the way OTHER than the associated Object
+			if(info.tValue > 1 || info.tValue == Ray.NO_INTERSECTION)
+			{
+				//Nothing in the way, so now check the associatedObj
+				
+				//IMPLEMENT LATER
+				
+				lightLevel += light.GetLightLevelAt(point);
+			}
+		}
+		
+		return lightLevel;
 	}
 
 	public static Color LinearInterpolate(Color color1, Color color2, double interpAmount)

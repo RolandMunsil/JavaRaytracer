@@ -20,6 +20,13 @@ public class Ray
 		zEquation = new LinearEquation(direction.z, origin.z);
 	}
 	
+	public Ray(Point3D from, Point3D to)
+	{
+		xEquation = new LinearEquation(to.x - from.x, from.x);
+		yEquation = new LinearEquation(to.y - from.y, from.y);
+		zEquation = new LinearEquation(to.z - from.z, from.z);
+	}
+	
 	public Point3D GetPointAt(double tValue)
 	{
 		return new Point3D(

@@ -19,4 +19,12 @@ public class QuadraticEquation
 				eqn1.linearCoefficient + eqn2.linearCoefficient, 
 				eqn1.constant          + eqn2.constant);
 	}
+	
+	public static QuadraticEquation Subtract(QuadraticEquation eqn1, QuadraticEquation eqn2)
+	{
+		return new QuadraticEquation(
+				eqn1.quadCoefficient   - eqn2.quadCoefficient,
+				eqn1.linearCoefficient - eqn2.linearCoefficient, 
+				eqn1.constant          - eqn2.constant);
+	}
 }
