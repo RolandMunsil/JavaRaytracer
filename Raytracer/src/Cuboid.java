@@ -83,7 +83,7 @@ public class Cuboid extends Renderable
 		
 		//X values
 		double xHighTVal = ray.xEquation.SolveWhenSetEqualTo(xBoundHigh);
-		if(xHighTVal < closestTValue && xHighTVal > 0)
+		if(xHighTVal < closestTValue && xHighTVal > Ray.LOWER_T_BOUND)
 		{
 			Point3D pointAtVal = ray.GetPointAt(xHighTVal);
 			if(pointAtVal.y <= yBoundHigh && pointAtVal.y >= yBoundLow && 
@@ -94,7 +94,7 @@ public class Cuboid extends Renderable
 		}
 		
 		double xLowTVal = ray.xEquation.SolveWhenSetEqualTo(xBoundLow);
-		if(xLowTVal < closestTValue && xLowTVal > 0)
+		if(xLowTVal < closestTValue && xLowTVal > Ray.LOWER_T_BOUND)
 		{
 			Point3D pointAtVal = ray.GetPointAt(xLowTVal);
 			if(pointAtVal.y <= yBoundHigh && pointAtVal.y >= yBoundLow && 
@@ -107,7 +107,7 @@ public class Cuboid extends Renderable
 		
 		//Y values
 		double yHighTVal = ray.yEquation.SolveWhenSetEqualTo(yBoundHigh);
-		if(yHighTVal < closestTValue && yHighTVal > 0)
+		if(yHighTVal < closestTValue && yHighTVal > Ray.LOWER_T_BOUND)
 		{
 			Point3D pointAtVal = ray.GetPointAt(yHighTVal);
 			if(pointAtVal.x <= xBoundHigh && pointAtVal.x >= xBoundLow && 
@@ -118,7 +118,7 @@ public class Cuboid extends Renderable
 		}
 		
 		double yLowTVal = ray.yEquation.SolveWhenSetEqualTo(yBoundLow);
-		if(yLowTVal < closestTValue && yLowTVal > 0)
+		if(yLowTVal < closestTValue && yLowTVal > Ray.LOWER_T_BOUND)
 		{
 			Point3D pointAtVal = ray.GetPointAt(yLowTVal);
 			if(pointAtVal.x <= xBoundHigh && pointAtVal.x >= xBoundLow && 
@@ -131,7 +131,7 @@ public class Cuboid extends Renderable
 		
 		//Z values
 		double zHighTVal = ray.zEquation.SolveWhenSetEqualTo(zBoundHigh);
-		if(zHighTVal < closestTValue && zHighTVal > 0)
+		if(zHighTVal < closestTValue && zHighTVal > Ray.LOWER_T_BOUND)
 		{
 			Point3D pointAtVal = ray.GetPointAt(zHighTVal);
 			if(pointAtVal.y <= yBoundHigh && pointAtVal.y >= yBoundLow && 
@@ -142,7 +142,7 @@ public class Cuboid extends Renderable
 		}
 		
 		double zLowTVal = ray.zEquation.SolveWhenSetEqualTo(zBoundLow);
-		if(zLowTVal < closestTValue && zLowTVal > 0)
+		if(zLowTVal < closestTValue && zLowTVal > Ray.LOWER_T_BOUND)
 		{
 			Point3D pointAtVal = ray.GetPointAt(zLowTVal);
 			if(pointAtVal.y <= yBoundHigh && pointAtVal.y >= yBoundLow && 

@@ -18,9 +18,9 @@ public class Main
 	public static double CAMERA_SIZE = 1 * ZOOM;
 	public static double FOCAL_LENGTH = 700.0 * ZOOM; //Sort of like FOV
 	
-	public static Camera camera = new Camera(new Point3D(1000, 1000, -1000), -Math.PI / 4, -Math.PI / 4);
+	public static Camera camera = new Camera(new Point3D(0, 0, -900), 0, 0);
 	
-	/*
+	
 	public static Sphere sphere = new Sphere(Color.BLACK, new Point3D(350, -200, 0), 300, .5);
 	public static Sphere sphere2 = new Sphere(Color.WHITE, new Point3D(-350, -200, 0), 300, .5);
 	public static YPlane plane = new YPlane(-800, 0);
@@ -28,17 +28,21 @@ public class Main
 	public static Cuboid cube = new Cuboid(new Point3D(400, 0, -300), 200, 200, 200, Color.RED, .5);
 	
 	public static Renderable[] renderedObjects = { sphere, plane, sphere2, cube };
-	*/
 	
-	public static YPlane plane = new YPlane(-450, .5);
-	public static Cuboid largeCube = new Cuboid(new Point3D(0, 0, 0), 400, 400, 400, Color.BLACK, .7);
-	public static Hyperbola hyperbola = new Hyperbola(Color.BLACK, new Point3D(0, 400, 0), 200, .5);
 	
-	public static Sphere rotatingSphere = new Sphere(Color.GRAY, new Point3D(0, 0, -600), 75, .6);
+	//public static YPlane plane = new YPlane(-450, .5);
+	//public static Cuboid largeCube = new Cuboid(new Point3D(0, 0, 0), 400, 400, 400, Color.BLACK, .7);
+	//public static Hyperbola hyperbola = new Hyperbola(Color.BLACK, new Point3D(0, 400, 0), 200, .5);
 	
-	public static Renderable[] renderedObjects = { hyperbola, rotatingSphere, plane };
+	//public static Sphere rotatingSphere = new Sphere(new Color(154, 206, 235), new Point3D(0, 0, -600), 75, .6);
 	
-	public static Light aLight = new Light(new Point3D(0, 900, 0), 2000, 1);
+//	public static Sphere sphere1 = new Sphere(Color.RED, new Point3D(0, 0, 500), 400, .5);
+//	public static Sphere sphere2 = new Sphere(Color.BLUE, new Point3D(0, 0, -500), 400, .5);
+//	
+//	public static Renderable[] renderedObjects = { sphere1, sphere2, plane };
+	
+	public static Light aLight = new Light(new Point3D(0, 900, 0), 3000, 1);
+	public static Light BLight = new Light(new Point3D(700, 400, 0), 2000, 1);
 	
 	public static Light[] lights = { aLight };
 	
@@ -58,19 +62,19 @@ public class Main
         
         for(int frameNum = 0; frameNum < totalFrames; frameNum++)
         {
-        	double angleHoriz = -((frameNum / 200.0) * Math.PI * 2);
-        	double angleVert = -(Math.PI / 4) * Math.sin((frameNum / 240.0) * Math.PI * 2);
+        	//double angleHoriz = -((frameNum / 200.0) * Math.PI * 2);
+        	//double angleVert = -(Math.PI / 4) * Math.sin((frameNum / 240.0) * Math.PI * 2);
+        	//
+        	//camera.angleHoriz = angleHoriz;
+        	//camera.angleVert = angleVert;
+        	//
+        	//camera.center = new Point3D(0, 0, 0);
+        	//Point3D point = camera.GetAdjustedForCameraRotation(new Point3D(0, 0, 1600));
+        	//camera.center = new Point3D(-point.x, -point.y, -point.z);
         	
-        	camera.angleHoriz = angleHoriz;
-        	camera.angleVert = angleVert;
+        	//rotatingSphere.center = Utils.RotatePointAroundPoint(new Point3D(0, 0, 0), new Point3D(0, 0, -600), frameNum / 45.0, Math.sin(frameNum / 45.0));
         	
-        	camera.center = new Point3D(0, 0, 0);
-        	Point3D point = camera.GetAdjustedForCameraRotation(new Point3D(0, 0, 800));
-        	camera.center = new Point3D(-point.x, -point.y, -point.z);
-        	
-        	rotatingSphere.center = Utils.RotatePointAroundPoint(new Point3D(0, 0, 0), new Point3D(0, 0, -600), frameNum / 45.0, Math.sin(frameNum / 45.0));
-        	
-        	//panel.clearPanel(0xFFFFFFFF);
+        	//panel.clearPanel(0xFFFFFFFF);       	
         	
 	        for(int x = 0; x < panel.unscaledWidth; x++)
 	        {
@@ -93,7 +97,7 @@ public class Main
 	        		
 	        		Ray ray = new Ray(direction, origin);
 	        		
-	        		Color color = GetColorAt(ray, null, MAX_REFLECTIONS);
+	        		Color color = GetColorAt(ray/*, null*/, MAX_REFLECTIONS);
 	
 	        		panel.setPixel(x, y, color);
 	            }
@@ -110,16 +114,16 @@ public class Main
         }
 	}
 	
-	public static HitInfo GetFirstHitObject(Ray ray, Renderable objToIgnore)
+	public static HitInfo GetFirstHitObject(Ray ray/*, Renderable objToIgnore*/)
 	{
 		HitInfo closestHit = new HitInfo(false, null, Double.MAX_VALUE);
 		
 		for(int i = 0; i < renderedObjects.length; i++)
 		{
-			if(renderedObjects[i] == objToIgnore)
-			{
-				continue;
-			}
+			//if(renderedObjects[i] == objToIgnore)
+			//{
+			//	continue;
+			//}
 			
 			double intersection = renderedObjects[i].getIntersectionValue(ray);
 			
@@ -132,12 +136,12 @@ public class Main
 		return closestHit;
 	}	
 	
-	public static Color GetColorAt(Ray ray, Renderable objToIgnore, int maxReflections)
+	public static Color GetColorAt(Ray ray/*, Renderable objToIgnore*/, int maxReflections)
 	{
 		//Set to default
 		Color color = SKY_COLOR;
 		
-		HitInfo hitInfo = GetFirstHitObject(ray, objToIgnore);
+		HitInfo hitInfo = GetFirstHitObject(ray/*, objToIgnore*/);
 		if(hitInfo.didHit)
 		{
 			Point3D hitPoint = ray.GetPointAt(hitInfo.tValue);
@@ -156,7 +160,7 @@ public class Main
 				
 				Ray reflectRay = new Ray(reflectVector, hitPoint);
 				
-				Color reflectionColor = GetColorAt(reflectRay, hitInfo.hitObject, maxReflections - 1);
+				Color reflectionColor = GetColorAt(reflectRay/*, hitInfo.hitObject*/, maxReflections - 1);
 				
 				color = LinearInterpolate(color, reflectionColor, hitInfo.hitObject.reflectivity);
 				
@@ -164,6 +168,7 @@ public class Main
 			}
 			
 			//Adjust for light
+			
 			
 			double lightLevel = GetLightLevelAt(ray.GetPointAt(hitInfo.tValue), hitInfo.hitObject);
 			
@@ -177,6 +182,7 @@ public class Main
 			
 			color = new Color(newR, newG, newB);
 			
+			
 		}
 		
 		return color;
@@ -189,17 +195,13 @@ public class Main
 		
 		for(Light light : lights)
 		{
-			Ray lightRay = new Ray(light.center, point);
+			Ray lightRay = new Ray(point, light.center);
 			
-			HitInfo info = GetFirstHitObject(lightRay, associatedObj);
+			HitInfo info = GetFirstHitObject(lightRay/*, associatedObj*/);
 			
 			//First check if there is anything in the way OTHER than the associated Object
 			if(info.tValue > 1 || info.tValue == Ray.NO_INTERSECTION)
-			{
-				//Nothing in the way, so now check the associatedObj
-				
-				//IMPLEMENT LATER
-				
+			{				
 				lightLevel += light.GetLightLevelAt(point);
 			}
 		}

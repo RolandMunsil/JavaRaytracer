@@ -1,6 +1,7 @@
 public class Ray 
 {
 	public static final double NO_INTERSECTION = Double.MAX_VALUE;
+	public static final double LOWER_T_BOUND = 0.00000001;
 	
 	LinearEquation xEquation;
 	LinearEquation yEquation;
