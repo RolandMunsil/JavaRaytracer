@@ -31,18 +31,18 @@ public class Cuboid extends Renderable
 	public Color getColorAt(Point3D point) 
 	{
 		Vector3D vector = getNormalVectorAt(point);
-		if(vector.x != 0)
-		{
-			return Color.RED;
-		}
-		if(vector.y != 0)
-		{
-			return Color.BLUE;
-		}
-		if(vector.z != 0)
-		{
-			return Color.GREEN;
-		}
+//		if(vector.x != 0)
+//		{
+//			return Color.RED;
+//		}
+//		if(vector.y != 0)
+//		{
+//			return Color.BLUE;
+//		}
+//		if(vector.z != 0)
+//		{
+//			return Main.niceBlue;
+//		}
 		
 		return color;
 	}

@@ -6,8 +6,13 @@ import javax.swing.JFrame;
 
 public class Main 
 {
-	static int width = 1280;
-	static int height = 720;
+	//THINGS TO TRY
+	//Looking through 2 refractspheres - lens or something?
+	//Nodistortion cube with refracting sphere in center - see if it looks wrong
+	
+	
+	static int width = 1000 + 16;
+	static int height = 1000 + 38;
 	static int actualWidth = width - 16;
 	static int actualHeight = height - 38;
 	
@@ -20,17 +25,18 @@ public class Main
 	public static final Color BACKGROUND_COLOR = new Color(154, 206, 235);
 	public static final double GLOBAL_LIGHT_LEVEL = .25;
 	public static final int MAX_REFLECTIONS = 16;
-	public static final int MAX_REFRACTIONS = 1;
+	public static final int MAX_REFRACTIONS = 16;
 	public static final int ANTIALIASING_AMOUNT = 1;
-	public static double ZOOM = 1;
+	public static double ZOOM = 2;
 	public static double CAMERA_SIZE = 1 * ZOOM;
 	public static double FOCAL_LENGTH = 700.0 * ZOOM; //Sort of like FOV
 	
 	public static boolean SAVE_IMAGES = false;
 	
-	public static Camera camera = new Camera(new Point3D(1000, 350, -1000), -Math.PI / 4, -Math.PI / 7);
+	//public static Camera camera = new Camera(new Point3D(1000, 200, -1000), -Math.PI / 4, -Math.PI / 10);
 	//public static Camera camera = new Camera(new Point3D(-200, 200, -400), .2, -.1);
 	//public static Camera camera = new Camera(new Point3D(0, 600, 0), 0, -Math.PI / 2);
+	//public static Camera camera = new Camera(new Point3D(1099.8883652832799, 843.5992676516778, -799.115673436598), -0.9424777960769379, -0.5553603672697958);
 	
 	
 //	public static Sphere sphere = new Sphere(Color.BLACK, new Point3D(350, -200, 0), 300, .5);
@@ -42,18 +48,54 @@ public class Main
 //	public static Renderable[] renderedObjects = { sphere, plane, sphere2, cube };
 	
 	
-	public static YPlane plane = new YPlane(-400, .5, 0, 1);
-	public static Cuboid largeCube = new Cuboid(new Point3D(0, 0, 0), 400, 400, 400, Color.BLACK, .7, 0, 1);
+	
+	
 //	public static Hyperbola hyperbola = new Hyperbola(Color.BLACK, new Point3D(0, 400, 0), 200, .5);
 	
-	public static Sphere rotatingSphere = new Sphere(new Color(154, 206, 235), new Point3D(0, 100, -600), 75, .6, 0, 1);
+	public static Sphere rotatingSphere = new Sphere(goodGray, new Point3D(0, 0, -600), 75, .75, 0, 1);
 	
 //	public static Sphere sphere1 = new Sphere(Color.RED, new Point3D(0, 0, 500), 400, .5);
 //	public static Sphere sphere2 = new Sphere(Color.BLUE, new Point3D(0, 0, -500), 400, .5);
 //	
-	public static Sphere sphere4 = new Sphere(Color.BLUE, new Point3D(0, 0, 0), 400, .5, 0, 1);
 	
-	public static Renderable[] renderedObjects = { sphere4, plane, rotatingSphere};//sphere1, sphere2, plane };
+	
+	//public static Sphere sphere4 = new Sphere(niceBlue, new Point3D(0, 0, 0), 400, .75, 0, Ray.WATER_REFR_INDEX);
+	
+//	////////////////////////////////////////
+//	// TWO REFRACTIVE SPHERES IN A LINE TO CREATE A LENS THING
+//	////////////////////////////////////////
+//
+//    public static Camera camera = new Camera(new Point3D(0, 0, -600), 0, 0);	
+//    //public static Camera camera = new Camera(new Point3D(1099.8883652832799, 843.5992676516778, -799.115673436598), -0.9424777960769379, -0.5553603672697958);
+//
+//	public static YPlane plane = new YPlane(-600, .4, 0, 1);
+//	public static Sphere closeSphere = new Sphere(niceBlue, new Point3D(0, 0, 0), 500, 0, .8, 1.5);
+//	public static Sphere farSphere = new Sphere(niceBlue, new Point3D(0, 0, 1500), 400, 0, .8, 1.5);
+//	
+//	public static Cuboid farthestCube = new Cuboid(new Point3D(-800, 0, 2400), 200, 200, 200, niceRed, .75, 0, 0);
+//	
+//	public static Renderable[] renderedObjects = { plane, closeSphere, farSphere, farthestCube };
+//	
+//	////////////////////////////////////////	
+	
+	
+	
+	////////////////////////////////////////
+	// REFRACTIVE CUBE W/ SPHERE INSIDE
+	////////////////////////////////////////
+
+    public static Camera camera = new Camera(new Point3D(1099.8883652832799, 843.5992676516778, -799.115673436598), -0.9424777960769379, -0.5553603672697958);	
+
+	public static YPlane plane = new YPlane(-400, .4, 0, 1);
+	public static Cuboid refractingCube = new Cuboid(new Point3D(0, 0, 0), 800, 800, 800, goodGray, 0, .8, 1.5);
+	public static Sphere encasedSphere = new Sphere(niceBlue, new Point3D(0, 0, 0), 200, .6, 0, 1.5);
+	
+	public static Renderable[] renderedObjects = { plane, refractingCube, encasedSphere };
+	
+	////////////////////////////////////////
+	
+	
+	
 //	
 //	public static int dis = 1400;
 //	
@@ -62,7 +104,7 @@ public class Main
 //	public static Light cLight = new Light(new Point3D(-dis, 400, 0), 6000, .5);
 //	public static Light dLight = new Light(new Point3D(dis, 400, 0), 6000, .5);
 	
-	public static Light aboveLight = new Light(new Point3D(0, 900, 0), 6000, .5);
+	public static Light aboveLight = new Light(new Point3D(900, 900, 0), 6000, .75);
 	
 	public static Light[] lights = { aboveLight };
 	
@@ -107,12 +149,12 @@ public class Main
 //                	double adjY = (y - (size / 2.0)) * radius;
 //                	double adjZ = (z - (size / 2.0)) * radius;
 //                	
-//                	lights[(x * size * size) + (y * size) + z] = new Light(new Point3D(adjX, adjY + 900, adjZ), 3000, 1 / ((double)size * size * size));
+//                	lights[(x * size * size) + (y * size) + z] = new Light(new Point3D(adjX + 1100, adjY + 1100, adjZ), 6000, .75 / ((double)size * size * size));
 //                }
 //            }
 //        }
         
-        int totalFrames = 1;
+        int totalFrames = 900;
         
         for(int frameNum = 0; frameNum < totalFrames; frameNum++)
         {
@@ -128,7 +170,16 @@ public class Main
 //        	
 //        	rotatingSphere.center = Utils.RotatePointAroundPoint(new Point3D(0, 0, 0), new Point3D(0, 0, -600), frameNum / 45.0, Math.sin(frameNum / 45.0));
 //        	
-//        	panel.clearPanel(0xFFFFFFFF);       	
+//        	//panel.clearPanel(0xFFFFFFFF);  
+        	
+        	//largeCube.refractionIndex += .05;
+        	
+        	//rotatingSphere.center.z += 10;
+        	//sphere4.refractionIndex -= 1 / 40.0;
+        	
+        	//closeSphere.center.z -= 30;
+        	
+        	//SetZoom(ZOOM * 1.4);
         	
 	        for(int x = 0; x < panel.unscaledWidth; x++)
 	        {
@@ -154,6 +205,10 @@ public class Main
 	        		Color color = GetColorAt(ray, MAX_REFLECTIONS, MAX_REFRACTIONS);
 	
 	        		panel.setPixel(x, y, color);
+	        		
+	        		//lights[0].center.x = 1100 + ((Math.random() * 200) - 100);
+	        		//lights[0].center.y = 1100 + ((Math.random() * 200) - 100);
+	        		//lights[0].center.z = 0    + ((Math.random() * 200) - 100);
 	            }
 	        	panel.repaint();
 	        }
@@ -171,6 +226,13 @@ public class Main
 				}
 	        }
         }
+	}
+	
+	public static void SetZoom(double value)
+	{
+		ZOOM = value;
+		CAMERA_SIZE = 1 * ZOOM;
+		FOCAL_LENGTH = 700.0 * ZOOM; 
 	}
 	
 	public static HitInfo GetFirstHitObject(Ray ray/*, Renderable objToIgnore*/)
@@ -222,9 +284,10 @@ public class Main
 			if(maxRefractions > 0 && hitInfo.hitObject.refractivity > 0)
 			{
 				double from = ray.containingMaterialRefractIndex;
-				double to = (from == Ray.AIR_REFR_INDEX ? hitInfo.hitObject.refractionIndex : Ray.AIR_REFR_INDEX);
+				double to = (from == hitInfo.hitObject.refractionIndex ? Ray.AIR_REFR_INDEX : hitInfo.hitObject.refractionIndex);
 				
 				RefractionInfo refractInfo = ray.ToVector3D().GetRefracted(hitInfo.hitObject.getNormalVectorAt(hitPoint), from, to);
+				refractInfo.refractedVector = Utils.RotateVectorAroundCenter(refractInfo.refractedVector, (Math.random() - .5) / 20, (Math.random() - .5) / 20);
 				
 				Ray refractRay = new Ray(refractInfo.refractedVector, hitPoint, refractInfo.wasTotalInternalReflection ? from : to);
 				refractColor = GetColorAt(refractRay, maxReflections, maxRefractions - 1);
@@ -256,8 +319,8 @@ public class Main
 			
 			
 			//Adjust for light
-			
-			
+		
+			/*
 			double lightLevel = GetLightLevelAt(ray.GetPointAt(hitInfo.tValue), hitInfo.hitObject);
 			
 			int newR = (int) (color.getRed() * lightLevel);
@@ -269,6 +332,9 @@ public class Main
 			if(newB > 255) newB = 255;
 			
 			color = new Color(newR, newG, newB);
+			*/
+			
+			
 			
 		}
 		

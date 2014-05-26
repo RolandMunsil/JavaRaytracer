@@ -8,8 +8,11 @@ public class Ray
 	LinearEquation zEquation;
 	
 	public double containingMaterialRefractIndex;
-	public static final double AIR_REFR_INDEX = 1.000277;
-	public static final double GLASS_REFR_INDEX = 1.491;
+	public static final double AIR_REFR_INDEX = 1;//.000277;
+	public static final double UNDISTORTED_REFR_INDEX = AIR_REFR_INDEX;
+	public static final double WATER_REFR_INDEX = 1.3330;
+	public static final double PYREX_REFR_INDEX = 1.470;
+	public static final double DIAMOND_REFR_INDEX = 2.419;
 	
 	public Ray(LinearEquation xEquation, LinearEquation yEquation, LinearEquation zEquation, double containingMaterialRefractIndex)
 	{
