@@ -52,7 +52,16 @@ public class Vector3D
 	
 	public Vector3D GetNormalized()
 	{
-		return new Vector3D(x / GetLength(), y / GetLength(), z / GetLength());
+		double length = GetLength();
+		return new Vector3D(x / length, y / length, z / length);
+	}
+	
+	public void Normalize()
+	{
+		double length = GetLength();
+		x = x / length;
+		y = y / length;
+		z = z / length;
 	}
 	
 	//http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
@@ -69,11 +78,15 @@ public class Vector3D
 	public RefractionInfo GetRefracted(Vector3D surfaceNormal, double refractIndexFrom, double refractIndexTo)
 	{	
 		Vector3D negNormal = new Vector3D(-surfaceNormal.x, -surfaceNormal.y, -surfaceNormal.z);
+		negNormal.Normalize();
+		this.Normalize();
 		
 		double cos1 = Vector3D.DotProduct(this, negNormal);
 		if(cos1 < 0)
 		{
-			int k = 1 / 0;
+			cos1 = Vector3D.DotProduct(this, surfaceNormal.GetNormalized());
+			
+			//int k = 1 / 0;
 		}
 		
 		double refractRatio = refractIndexFrom / refractIndexTo;

@@ -12,31 +12,29 @@ public class Utils
 	
 	public static Vector3D RotateVectorAroundCenter(Vector3D vector, double angleHoriz, double angleVert)
 	{
-		Vector3D copyVec = new Vector3D(vector.x, vector.y, vector.z);
-		
 		//Rotate the point around the center
 		if(angleVert != 0)
 		{
 			//Now do vertical
-			double lengthYZ = Math.sqrt(copyVec.y * copyVec.y + copyVec.z * copyVec.z);
-			double angleYZ = Math.atan2(copyVec.y, copyVec.z);
+			double lengthYZ = Math.sqrt(vector.y * vector.y + vector.z * vector.z);
+			double angleYZ = Math.atan2(vector.y, vector.z);
 			
 			double newAngle = angleYZ + angleVert;
-			copyVec.y = Math.sin(newAngle) * lengthYZ;
-			copyVec.z = Math.cos(newAngle) * lengthYZ;
+			vector.y = Math.sin(newAngle) * lengthYZ;
+			vector.z = Math.cos(newAngle) * lengthYZ;
 		}
 		
 		if(angleHoriz != 0)
 		{
 			//First do horizontal
-			double lengthXZ = Math.sqrt(copyVec.x * copyVec.x + copyVec.z * copyVec.z);
-			double angleXZ = Math.atan2(copyVec.x, copyVec.z);
+			double lengthXZ = Math.sqrt(vector.x * vector.x + vector.z * vector.z);
+			double angleXZ = Math.atan2(vector.x, vector.z);
 			
 			double newAngle = angleXZ + angleHoriz;
-			copyVec.x = Math.sin(newAngle) * lengthXZ;
-			copyVec.z = Math.cos(newAngle) * lengthXZ;
+			vector.x = Math.sin(newAngle) * lengthXZ;
+			vector.z = Math.cos(newAngle) * lengthXZ;
 		}
 		
-		return copyVec;
+		return vector;
 	}
 }

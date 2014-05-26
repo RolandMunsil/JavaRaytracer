@@ -11,40 +11,60 @@ public class Main
 	static int actualWidth = width - 16;
 	static int actualHeight = height - 38;
 	
-	public static final Color SKY_COLOR = new Color(154, 206, 235);
+	public static Color niceBlue = 		new Color(0.1f, 0.5f, 1.0f);
+	public static Color niceYellow = 	new Color(1.0f, 0.9f, 0.1f);
+	public static Color niceRed =		new Color(1.0f, 0.3f, 0.1f);
+	public static Color niceGreen = 	new Color(0.3f, 1.0f, 0.1f);
+	public static Color goodGray = 		new Color(.75f, .75f, .75f);
+	
+	public static final Color BACKGROUND_COLOR = new Color(154, 206, 235);
+	public static final double GLOBAL_LIGHT_LEVEL = .25;
 	public static final int MAX_REFLECTIONS = 16;
+	public static final int MAX_REFRACTIONS = 1;
 	public static final int ANTIALIASING_AMOUNT = 1;
 	public static double ZOOM = 1;
 	public static double CAMERA_SIZE = 1 * ZOOM;
 	public static double FOCAL_LENGTH = 700.0 * ZOOM; //Sort of like FOV
 	
-	public static Camera camera = new Camera(new Point3D(0, 0, -900), 0, 0);
+	public static boolean SAVE_IMAGES = false;
+	
+	public static Camera camera = new Camera(new Point3D(1000, 350, -1000), -Math.PI / 4, -Math.PI / 7);
+	//public static Camera camera = new Camera(new Point3D(-200, 200, -400), .2, -.1);
+	//public static Camera camera = new Camera(new Point3D(0, 600, 0), 0, -Math.PI / 2);
 	
 	
-	public static Sphere sphere = new Sphere(Color.BLACK, new Point3D(350, -200, 0), 300, .5);
-	public static Sphere sphere2 = new Sphere(Color.WHITE, new Point3D(-350, -200, 0), 300, .5);
-	public static YPlane plane = new YPlane(-800, 0);
+//	public static Sphere sphere = new Sphere(Color.BLACK, new Point3D(350, -200, 0), 300, .5);
+//	public static Sphere sphere2 = new Sphere(Color.WHITE, new Point3D(-350, -200, 0), 300, .5);
+//	public static YPlane plane = new YPlane(-800, 0);
+//	
+//	public static Cuboid cube = new Cuboid(new Point3D(400, 0, -300), 200, 200, 200, Color.RED, .5);
+//	
+//	public static Renderable[] renderedObjects = { sphere, plane, sphere2, cube };
 	
-	public static Cuboid cube = new Cuboid(new Point3D(400, 0, -300), 200, 200, 200, Color.RED, .5);
 	
-	public static Renderable[] renderedObjects = { sphere, plane, sphere2, cube };
+	public static YPlane plane = new YPlane(-400, .5, 0, 1);
+	public static Cuboid largeCube = new Cuboid(new Point3D(0, 0, 0), 400, 400, 400, Color.BLACK, .7, 0, 1);
+//	public static Hyperbola hyperbola = new Hyperbola(Color.BLACK, new Point3D(0, 400, 0), 200, .5);
 	
-	
-	//public static YPlane plane = new YPlane(-450, .5);
-	//public static Cuboid largeCube = new Cuboid(new Point3D(0, 0, 0), 400, 400, 400, Color.BLACK, .7);
-	//public static Hyperbola hyperbola = new Hyperbola(Color.BLACK, new Point3D(0, 400, 0), 200, .5);
-	
-	//public static Sphere rotatingSphere = new Sphere(new Color(154, 206, 235), new Point3D(0, 0, -600), 75, .6);
+	public static Sphere rotatingSphere = new Sphere(new Color(154, 206, 235), new Point3D(0, 100, -600), 75, .6, 0, 1);
 	
 //	public static Sphere sphere1 = new Sphere(Color.RED, new Point3D(0, 0, 500), 400, .5);
 //	public static Sphere sphere2 = new Sphere(Color.BLUE, new Point3D(0, 0, -500), 400, .5);
 //	
-//	public static Renderable[] renderedObjects = { sphere1, sphere2, plane };
+	public static Sphere sphere4 = new Sphere(Color.BLUE, new Point3D(0, 0, 0), 400, .5, 0, 1);
 	
-	public static Light aLight = new Light(new Point3D(0, 900, 0), 3000, 1);
-	public static Light BLight = new Light(new Point3D(700, 400, 0), 2000, 1);
+	public static Renderable[] renderedObjects = { sphere4, plane, rotatingSphere};//sphere1, sphere2, plane };
+//	
+//	public static int dis = 1400;
+//	
+//	public static Light aLight = new Light(new Point3D(0, 400, -dis), 6000, .5);
+//	public static Light bLight = new Light(new Point3D(0, 400, dis), 6000, .5);
+//	public static Light cLight = new Light(new Point3D(-dis, 400, 0), 6000, .5);
+//	public static Light dLight = new Light(new Point3D(dis, 400, 0), 6000, .5);
 	
-	public static Light[] lights = { aLight };
+	public static Light aboveLight = new Light(new Point3D(0, 900, 0), 6000, .5);
+	
+	public static Light[] lights = { aboveLight };
 	
 	public static void main(String[] args) 
 	{
@@ -58,23 +78,57 @@ public class Main
         frame.setFocusable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        int totalFrames = 900;
+//        renderedObjects = new Renderable[26];
+//        
+//        for(int x = 0; x < 5; x++)
+//        {
+//        	for(int z = 0; z < 5; z++)
+//            {
+//            	int adjX = x * 400;
+//            	int adjZ = z * 400;
+//            	Sphere sphere = new Sphere(new Color(170, 0, 0), new Point3D(adjX - 1000, 0, adjZ - 1000), 175, .5);
+//            	renderedObjects[(x * 5) + z] = sphere;
+//            }
+//        }
+//        renderedObjects[25] = plane;
+        
+        
+//        int size = 5;
+//        double radius = 100;
+//        
+//        lights = new Light[size * size * size];
+//        for(int x = 0; x < size; x++)
+//        {
+//        	for(int y = 0; y < size; y++)
+//            {
+//        		for(int z = 0; z < size; z++)
+//                {
+//                	double adjX = (x - (size / 2.0)) * radius;
+//                	double adjY = (y - (size / 2.0)) * radius;
+//                	double adjZ = (z - (size / 2.0)) * radius;
+//                	
+//                	lights[(x * size * size) + (y * size) + z] = new Light(new Point3D(adjX, adjY + 900, adjZ), 3000, 1 / ((double)size * size * size));
+//                }
+//            }
+//        }
+        
+        int totalFrames = 1;
         
         for(int frameNum = 0; frameNum < totalFrames; frameNum++)
         {
-        	//double angleHoriz = -((frameNum / 200.0) * Math.PI * 2);
-        	//double angleVert = -(Math.PI / 4) * Math.sin((frameNum / 240.0) * Math.PI * 2);
-        	//
-        	//camera.angleHoriz = angleHoriz;
-        	//camera.angleVert = angleVert;
-        	//
-        	//camera.center = new Point3D(0, 0, 0);
-        	//Point3D point = camera.GetAdjustedForCameraRotation(new Point3D(0, 0, 1600));
-        	//camera.center = new Point3D(-point.x, -point.y, -point.z);
-        	
-        	//rotatingSphere.center = Utils.RotatePointAroundPoint(new Point3D(0, 0, 0), new Point3D(0, 0, -600), frameNum / 45.0, Math.sin(frameNum / 45.0));
-        	
-        	//panel.clearPanel(0xFFFFFFFF);       	
+//        	double angleHoriz = -((frameNum / 200.0) * Math.PI * 2);
+//        	double angleVert = -(Math.PI / 4) * Math.sin((frameNum / 240.0) * Math.PI * 2);
+//        	
+//        	camera.angleHoriz = angleHoriz;
+//        	camera.angleVert = angleVert;
+//        	
+//        	camera.center = new Point3D(0, 0, 0);
+//        	Point3D point = camera.GetAdjustedForCameraRotation(new Point3D(0, 0, 1600));
+//        	camera.center = new Point3D(-point.x, -point.y, -point.z);
+//        	
+//        	rotatingSphere.center = Utils.RotatePointAroundPoint(new Point3D(0, 0, 0), new Point3D(0, 0, -600), frameNum / 45.0, Math.sin(frameNum / 45.0));
+//        	
+//        	panel.clearPanel(0xFFFFFFFF);       	
         	
 	        for(int x = 0; x < panel.unscaledWidth; x++)
 	        {
@@ -95,9 +149,9 @@ public class Main
 	        		
 	        		Vector3D direction = camera.GetAdjustedForCameraRotation(new Vector3D(adjX * (1 / FOCAL_LENGTH), adjY * (1 / FOCAL_LENGTH), 1));
 	        		
-	        		Ray ray = new Ray(direction, origin);
+	        		Ray ray = new Ray(direction, origin, Ray.AIR_REFR_INDEX);
 	        		
-	        		Color color = GetColorAt(ray/*, null*/, MAX_REFLECTIONS);
+	        		Color color = GetColorAt(ray, MAX_REFLECTIONS, MAX_REFRACTIONS);
 	
 	        		panel.setPixel(x, y, color);
 	            }
@@ -105,12 +159,17 @@ public class Main
 	        }
 	        panel.repaint();
 	        
-	        try {
-				panel.SaveScaledDownScreen("C:\\Users\\Roland\\Desktop\\JavaRaytracer Renders\\image" + String.format("%03d", frameNum + 1) + ".png");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	        if(SAVE_IMAGES)
+	        {
+		        try 
+		        {
+		        	panel.SaveScaledDownScreen("C:\\Users\\Roland\\Desktop\\JavaRaytracer Renders\\image" + String.format("%03d", frameNum + 1) + ".png");
+				} 
+		        catch (IOException e) 
+		        {
+					e.printStackTrace();
+				}
+	        }
         }
 	}
 	
@@ -136,10 +195,10 @@ public class Main
 		return closestHit;
 	}	
 	
-	public static Color GetColorAt(Ray ray/*, Renderable objToIgnore*/, int maxReflections)
+	public static Color GetColorAt(Ray ray, int maxReflections, int maxRefractions)
 	{
 		//Set to default
-		Color color = SKY_COLOR;
+		Color color = BACKGROUND_COLOR;
 		
 		HitInfo hitInfo = GetFirstHitObject(ray/*, objToIgnore*/);
 		if(hitInfo.didHit)
@@ -148,24 +207,53 @@ public class Main
 			
 			color = hitInfo.hitObject.getColorAt(hitPoint);
 			
-			if(maxReflections > 0)
+			Color reflectColor = null;
+			Color refractColor = null;
+			
+			if(maxReflections > 0 && hitInfo.hitObject.reflectivity > 0)
 			{
 				Vector3D reflectVector = ray.ToVector3D().GetReflected(hitInfo.hitObject.getNormalVectorAt(hitPoint));
+				//reflectVector = Utils.RotateVectorAroundCenter(reflectVector, (Math.random() - .5) / 6, (Math.random() - .5) / 6);
 				
-				//double size = .25;
-				//
-				//reflectVector.x += (Math.random() * size) - size / 2;
-				//reflectVector.y += (Math.random() * size) - size / 2;
-				//reflectVector.z += (Math.random() * size) - size / 2;
-				
-				Ray reflectRay = new Ray(reflectVector, hitPoint);
-				
-				Color reflectionColor = GetColorAt(reflectRay/*, hitInfo.hitObject*/, maxReflections - 1);
-				
-				color = LinearInterpolate(color, reflectionColor, hitInfo.hitObject.reflectivity);
-				
-				
+				Ray reflectRay = new Ray(reflectVector, hitPoint, ray.containingMaterialRefractIndex);
+				reflectColor = GetColorAt(reflectRay/*, hitInfo.hitObject*/, maxReflections - 1, maxRefractions);
 			}
+			
+			if(maxRefractions > 0 && hitInfo.hitObject.refractivity > 0)
+			{
+				double from = ray.containingMaterialRefractIndex;
+				double to = (from == Ray.AIR_REFR_INDEX ? hitInfo.hitObject.refractionIndex : Ray.AIR_REFR_INDEX);
+				
+				RefractionInfo refractInfo = ray.ToVector3D().GetRefracted(hitInfo.hitObject.getNormalVectorAt(hitPoint), from, to);
+				
+				Ray refractRay = new Ray(refractInfo.refractedVector, hitPoint, refractInfo.wasTotalInternalReflection ? from : to);
+				refractColor = GetColorAt(refractRay, maxReflections, maxRefractions - 1);
+			}
+			
+			if(reflectColor == null && refractColor == null)
+			{
+				//Do nothing
+			}
+			else if (reflectColor != null && refractColor == null) //Only reflect, no refract
+			{
+				color = WeightedAverage(reflectColor, hitInfo.hitObject.reflectivity, 
+						color);
+			}
+			else if (reflectColor == null && refractColor != null) //Only refract, no reflect
+			{
+				color = WeightedAverage(refractColor, hitInfo.hitObject.refractivity,
+						color);
+			}
+			else if (reflectColor != null && refractColor != null) //Both refract AND reflect
+			{
+				color = WeightedAverage(reflectColor, hitInfo.hitObject.reflectivity, 
+						refractColor, hitInfo.hitObject.refractivity,
+						color);
+			}
+			
+			//color = LinearInterpolate(color, reflectionColor, hitInfo.hitObject.reflectivity);
+			//color = LinearInterpolate(color, refractionColor, .8);
+			
 			
 			//Adjust for light
 			
@@ -182,7 +270,6 @@ public class Main
 			
 			color = new Color(newR, newG, newB);
 			
-			
 		}
 		
 		return color;
@@ -191,11 +278,11 @@ public class Main
 	public static double GetLightLevelAt(Point3D point, Renderable associatedObj)
 	{
 		//Default light level
-		double lightLevel = 0;
+		double lightLevel = GLOBAL_LIGHT_LEVEL;
 		
 		for(Light light : lights)
 		{
-			Ray lightRay = new Ray(point, light.center);
+			Ray lightRay = new Ray(point, light.center, 0);
 			
 			HitInfo info = GetFirstHitObject(lightRay/*, associatedObj*/);
 			
@@ -209,13 +296,24 @@ public class Main
 		return lightLevel;
 	}
 
-	public static Color LinearInterpolate(Color color1, Color color2, double interpAmount)
+	public static Color WeightedAverage(Color color1, double weight1, Color color2)
 	{
-		double reverseInterpAmount = 1 - interpAmount;
 		return new Color(
-				(int)((color1.getRed() * reverseInterpAmount) + (color2.getRed() * interpAmount)),
-				(int)((color1.getGreen() * reverseInterpAmount) + (color2.getGreen() * interpAmount)),
-				(int)((color1.getBlue() * reverseInterpAmount) + (color2.getBlue() * interpAmount))
+				(int)((color1.getRed() * weight1) + (color2.getRed() * (1 - weight1))),
+				(int)((color1.getGreen() * weight1) + (color2.getGreen() * (1 - weight1))),
+				(int)((color1.getBlue() * weight1) + (color2.getBlue() * (1 - weight1)))
 				); 
+	}
+	
+	public static Color WeightedAverage(Color color1, double weight1, Color color2, double weight2, Color color3)
+	{
+		double weight3 = 1 - (weight1 + weight2);
+		return new Color(
+				(int)((color1.getRed() * weight1) + (color2.getRed() * weight2) + (color3.getRed() * weight3)),
+				(int)((color1.getGreen() * weight1) + (color2.getGreen() * weight2) + (color3.getGreen() * weight3)),
+				(int)((color1.getBlue() * weight1) + (color2.getBlue() * weight2) + (color3.getBlue() * weight3))
+				);
+		
+		
 	}
 }

@@ -6,12 +6,14 @@ public class Hyperbola extends Renderable
 	Point3D center;
 	double radius;
 	
-	public Hyperbola(Color color, Point3D center, double radius, double reflectivity)
+	public Hyperbola(Color color, Point3D center, double radius, double reflectivity, double refractivity, double refractionIndex)
 	{
 		this.color = color;
 		this.center = center;
 		this.radius = radius;
 		this.reflectivity = reflectivity;
+		this.refractivity = refractivity;
+		this.refractionIndex = refractionIndex;
 	}
 	
 	@Override

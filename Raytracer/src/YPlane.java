@@ -4,10 +4,12 @@ public class YPlane extends Renderable
 {
 	double yValue;
 	
-	public YPlane(double yValue, double reflectivity)
+	public YPlane(double yValue, double reflectivity, double refractivity, double refractionIndex)
 	{
 		this.yValue = yValue;
 		this.reflectivity = reflectivity;
+		this.refractivity = refractivity;
+		this.refractionIndex = refractionIndex;
 	}
 	
 	@Override

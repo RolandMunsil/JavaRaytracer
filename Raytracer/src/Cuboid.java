@@ -12,7 +12,7 @@ public class Cuboid extends Renderable
 	double zBoundHigh;
 	double zBoundLow;
 	
-	public Cuboid(Point3D center, double width, double height, double depth, Color color, double reflectivity)
+	public Cuboid(Point3D center, double width, double height, double depth, Color color, double reflectivity, double refractivity, double refractionIndex)
 	{
 		xBoundHigh = center.x + (width / 2);
 		xBoundLow = center.x - (width / 2);
@@ -23,6 +23,8 @@ public class Cuboid extends Renderable
 		
 		this.color = color;
 		this.reflectivity = reflectivity;
+		this.refractivity = refractivity;
+		this.refractionIndex = refractionIndex;
 	}
 	
 	@Override

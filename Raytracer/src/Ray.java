@@ -7,25 +7,35 @@ public class Ray
 	LinearEquation yEquation;
 	LinearEquation zEquation;
 	
-	public Ray(LinearEquation xEquation, LinearEquation yEquation, LinearEquation zEquation)
+	public double containingMaterialRefractIndex;
+	public static final double AIR_REFR_INDEX = 1.000277;
+	public static final double GLASS_REFR_INDEX = 1.491;
+	
+	public Ray(LinearEquation xEquation, LinearEquation yEquation, LinearEquation zEquation, double containingMaterialRefractIndex)
 	{
 		this.xEquation = xEquation;
 		this.yEquation = yEquation;
 		this.zEquation = zEquation;
+		
+		this.containingMaterialRefractIndex = containingMaterialRefractIndex;
 	}
 	
-	public Ray(Vector3D direction, Point3D origin)
+	public Ray(Vector3D direction, Point3D origin, double containingMaterialRefractIndex)
 	{
 		xEquation = new LinearEquation(direction.x, origin.x);
 		yEquation = new LinearEquation(direction.y, origin.y);
 		zEquation = new LinearEquation(direction.z, origin.z);
+		
+		this.containingMaterialRefractIndex = containingMaterialRefractIndex;
 	}
 	
-	public Ray(Point3D from, Point3D to)
+	public Ray(Point3D from, Point3D to, double containingMaterialRefractIndex)
 	{
 		xEquation = new LinearEquation(to.x - from.x, from.x);
 		yEquation = new LinearEquation(to.y - from.y, from.y);
 		zEquation = new LinearEquation(to.z - from.z, from.z);
+		
+		this.containingMaterialRefractIndex = containingMaterialRefractIndex;
 	}
 	
 	public Point3D GetPointAt(double tValue)
