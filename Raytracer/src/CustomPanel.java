@@ -75,6 +75,17 @@ public class CustomPanel extends JPanel
     	}
     }
     
+    public void setRectangle(int xLow, int xHigh, int yLow, int yHigh, Color color)
+    {
+    	for(int x = xLow; x <= xHigh; x++)
+    	{
+    		for(int y = yLow; y <= yHigh; y++)
+    		{
+    			setPixel(x, y, color);
+    		}
+    	}
+    }
+    
     public BufferedImage GenerateScaledDownScreen()
     {
     	BufferedImage scaledDown = new BufferedImage(displayWidth, displayHeight, BufferedImage.TYPE_INT_ARGB);
