@@ -22,11 +22,11 @@ public class Main
 	public static Color niceGreen = 	new Color(0.3f, 1.0f, 0.1f);
 	public static Color goodGray = 		new Color(.75f, .75f, .75f);
 	
-	public static final Color BACKGROUND_COLOR = new Color(154, 206, 235);
-	public static final double GLOBAL_LIGHT_LEVEL = 0;
+	public static final Color BACKGROUND_COLOR = Color.black;//new Color(154, 206, 235);
+	public static final double GLOBAL_LIGHT_LEVEL = .25;
 	public static final int MAX_REFLECTIONS = 16;
 	public static final int MAX_REFRACTIONS = 16;
-	public static final int ANTIALIASING_AMOUNT = 13;
+	public static final int ANTIALIASING_AMOUNT = 4;
 	public static double ZOOM = 1;
 	public static double CAMERA_SIZE = 1 * ZOOM;
 	public static double FOCAL_LENGTH = 700.0 * ZOOM; //Sort of like FOV
@@ -39,10 +39,6 @@ public class Main
 	//public static Camera camera = new Camera(new Point3D(-200, 200, -400), .2, -.1);
 	//public static Camera camera = new Camera(new Point3D(0, 600, 0), 0, -Math.PI / 2);
 	//public static Camera camera = new Camera(new Point3D(1099.8883652832799, 843.5992676516778, -799.115673436598), -0.9424777960769379, -0.5553603672697958);
-	
-	
-	
-	;
 	
 //	public static Sphere sphere = new Sphere(Color.BLACK, new Point3D(350, -200, 0), 300, .5);
 //	public static Sphere sphere2 = new Sphere(Color.WHITE, new Point3D(-350, -200, 0), 300, .5);
@@ -106,13 +102,28 @@ public class Main
 //	
 //	////////////////////////////////////////
 	
-	public static Camera camera = new Camera(new Point3D(0, 0, 0), 0, 0);	
+	//public static Camera camera = new Camera(new Point3D(0, 0, 0), 0, 0);
+	//public static Camera camera = new Camera(new Point3D(1099.8883652832799, 843.5992676516778, -799.115673436598), -0.9424777960769379, -0.5553603672697958);
+	
+	public static Camera camera = new Camera(new Point3D(2000, 800, -1600), new Point3D(0, 400, 0));
 
 	public static YPlane plane = new YPlane(-400, 0, 0, 1);
-	public static Cuboid wall = new Cuboid(new Point3D(0, 0, 1000), 100000, 100000, 4, niceRed, .0, 0, 1.5);
-	public static Sphere sideSphere = new Sphere(niceBlue, new Point3D(-400, 0, 600), 200, .3, 0, 1.5);
+	public static Cuboid wall = new Cuboid(new Point3D(0, 0, 1000), 20000, 8000, 40, niceBlue, .7, 0, 1.5);
+	public static Cuboid wall2 = new Cuboid(new Point3D(-1000, 0, 0), 40, 8000, 20000, niceRed, .7, 0, 1.5);
 	
-	public static Renderable[] renderedObjects = { plane, wall, sideSphere };
+	//public static Cuboid largeCube = new Cuboid(new Point3D(0, 0, 0), 800, 800, 800, niceRed, 0, .8, 1.333);
+	
+	public static Sphere sideSphere = new Sphere(goodGray, new Point3D(500, 300, -500), 600, .8, 0, 1.5);
+	
+	public static Cuboid pillar1 = new Cuboid(new Point3D(-600, 0, -500), 100, 4000, 100, new Color(152, 118, 84), 0, 0, 0);
+	public static Cuboid pillar2 = new Cuboid(new Point3D(-300, 0, -500), 100, 4000, 100, new Color(152, 118, 84), 0, 0, 0);
+	public static Cuboid pillar3 = new Cuboid(new Point3D(0,    0, -500), 100, 4000, 100, new Color(152, 118, 84), 0, 0, 0);
+	public static Cuboid pillar4 = new Cuboid(new Point3D(300,  0, -500), 100, 4000, 100, new Color(152, 118, 84), 0, 0, 0);
+	public static Cuboid pillar5 = new Cuboid(new Point3D(600,  0, -500), 100, 4000, 100, new Color(152, 118, 84), 0, 0, 0);
+	
+	//public static Cuboid straw = new Cuboid(new Point3D(0, 300, 0), 100, 600, 100, new Color(152, 118, 84), 0, 0, 0);
+	
+	public static Renderable[] renderedObjects = { plane, wall, sideSphere, wall2 };//pillar1, pillar2, pillar3, pillar4, pillar5 };
 	
 	
 //	
@@ -123,9 +134,15 @@ public class Main
 //	public static Light cLight = new Light(new Point3D(-dis, 400, 0), 6000, .5);
 //	public static Light dLight = new Light(new Point3D(dis, 400, 0), 6000, .5);
 	
-	public static Light aboveLight = new Light(new Point3D(-1000, 500, 400), 3000, 1);
+	public static Light lightL = new Light(new Point3D(1500, 1000, -500), 9000, .5);
+	public static Light lightR = new Light(new Point3D(500, 1000, -1500), 9000, .75);
 	
-	public static Light[] lights = { aboveLight };
+	//public static Light light2 = new Light(new Point3D(-1000, 1500, -1500), 9000, .25);
+	//public static Light lighte = new Light(new Point3D(1000, 1500, -1500), 9000, .25);
+	
+	//public static Light lightf = new Light(new Point3D(0, 1000, 0), 9000, .25);
+	
+	public static Light[] lights = { lightR };
 	
 	public static void main(String[] args) 
 	{
@@ -138,7 +155,7 @@ public class Main
         frame.setVisible(true);
         frame.setFocusable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
 //        renderedObjects = new Renderable[26];
 //        
 //        for(int x = 0; x < 5; x++)
@@ -154,7 +171,7 @@ public class Main
 //        renderedObjects[25] = plane;
         
         
-//        int size = 5;
+//        int size = 8;
 //        double radius = 100;
 //        
 //        lights = new Light[size * size * size];
@@ -168,7 +185,7 @@ public class Main
 //                	double adjY = (y - (size / 2.0)) * radius;
 //                	double adjZ = (z - (size / 2.0)) * radius;
 //                	
-//                	lights[(x * size * size) + (y * size) + z] = new Light(new Point3D(adjX + 1100, adjY + 1100, adjZ), 6000, .75 / ((double)size * size * size));
+//                	lights[(x * size * size) + (y * size) + z] = new Light(new Point3D(adjX - 1000, adjY + 500, adjZ + 300), 3000, .75 / ((double)size * size * size));
 //                }
 //            }
 //        }
@@ -177,7 +194,7 @@ public class Main
         
         int totalFrames = 900;
         
-        
+        /*
         for(int frameNum = 0; frameNum < totalFrames; frameNum++)
         {
 //        	double angleHoriz = -((frameNum / 200.0) * Math.PI * 2);
@@ -189,7 +206,7 @@ public class Main
 //        	camera.center = new Point3D(0, 0, 0);
 //        	Point3D point = camera.GetAdjustedForCameraRotation(new Point3D(0, 0, 1600));
 //        	camera.center = new Point3D(-point.x, -point.y, -point.z);
-//        	
+        	
 //        	rotatingSphere.center = Utils.RotatePointAroundPoint(new Point3D(0, 0, 0), new Point3D(0, 0, -600), frameNum / 45.0, Math.sin(frameNum / 45.0));
 //        	
 //        	//panel.clearPanel(0xFFFFFFFF);  
@@ -209,6 +226,10 @@ public class Main
 	        {
 	        	for(int y = 0; y < panel.unscaledHeight; y++)
 	            {
+	        		camera.center.x += (Math.random() - .5) / 5.0;
+	        		camera.center.y += (Math.random() - .5) / 5.0;
+	        		camera.center.z += (Math.random() - .5) / 5.0;
+	        		
 	        		double adjX = x - (panel.unscaledWidth / 2);
 	        		double adjY = y - (panel.unscaledHeight / 2);
 	        		
@@ -227,12 +248,19 @@ public class Main
 	        		Ray ray = new Ray(direction, origin, Ray.AIR_REFR_INDEX);
 	        		
 	        		Color color = GetColorAt(ray, MAX_REFLECTIONS, MAX_REFRACTIONS);
-	
+	        		
+//	        		if(frameNum != 0)
+//	        		{
+//	        			Color oldcolor = panel.getPixel(x, y);
+//	        			Color combine = new Color((color.getRed() + oldcolor.getRed()) / 2, (color.getGreen() + oldcolor.getGreen()) / 2, (color.getBlue() + oldcolor.getBlue()) / 2);
+//	        			color = combine;
+//	        		}
+	        		
 	        		panel.setPixel(x, y, color);
 	        		
-	        		lights[0].center.x = -1000 + ((Math.random() * 400) - 200);
-	        		lights[0].center.y = 500   + ((Math.random() * 400) - 200);
-	        		lights[0].center.z = 300   + ((Math.random() * 400) - 200);
+	        		//lights[0].center.x = -1000 + ((Math.random() * 700) - 350);
+	        		//lights[0].center.y = 500   + ((Math.random() * 700) - 350);
+	        		//lights[0].center.z = 300   + ((Math.random() * 700) - 350);
 	            }
 	        	panel.repaint();
 	        }
@@ -250,9 +278,9 @@ public class Main
 				}
 	        }
         }
+        */
         
         
-        /*
         panel.repaint();
         
         
@@ -264,6 +292,10 @@ public class Main
 	        {
 	        	for(int y = 0; y < panel.unscaledHeight; y += skipAmount)
 	            {
+	            	//camera.center.x += (Math.random() - .5) / 10.0;
+	        		//camera.center.y += (Math.random() - .5) / 10.0;
+	        		//camera.center.z += (Math.random() - .5) / 10.0;
+	            
 	        		if(skipAmount != startDiff)
 	        		{
 	        			if((x / skipAmount % 2) == 0 &&
@@ -300,7 +332,7 @@ public class Main
 	        	//panel.repaint();
 	        }
         }
-        */
+        
         
 	}
 	
@@ -347,10 +379,10 @@ public class Main
 			{
 				Vector3D reflectVector = ray.ToVector3D().GetReflected(hitInfo.hitObject.getNormalVectorAt(hitPoint));
 				//reflectVector = Utils.RotateVectorAroundCenter(reflectVector, (Math.random() - .5) / 1, (Math.random() - .5) / 1);
-				double length = 1;//reflectVector.GetLength();
-				reflectVector.x += (Math.random() - .5) * (length / 2);
-				reflectVector.y += (Math.random() - .5) * (length / 2);
-				reflectVector.z += (Math.random() - .5) * (length / 2);
+//				double length = 1;//reflectVector.GetLength();
+//				reflectVector.x += (Math.random() - .5) * (length / 40);
+//				reflectVector.y += (Math.random() - .5) * (length / 40);
+//				reflectVector.z += (Math.random() - .5) * (length / 40);
 				
 				Ray reflectRay = new Ray(reflectVector, hitPoint, ray.containingMaterialRefractIndex);
 				reflectColor = GetColorAt(reflectRay/*, hitInfo.hitObject*/, maxReflections - 1, maxRefractions);

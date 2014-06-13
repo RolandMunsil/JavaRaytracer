@@ -59,6 +59,18 @@ public class CustomPanel extends JPanel
     	}
     }
     
+    public Color getPixel(int x, int y)
+    {
+    	if (x >= 0 && x < canvas.getWidth() && y >= 0 && y < canvas.getHeight())
+    	{
+    		return new Color(canvas.getRGB(x, y));
+    	}
+    	else
+    	{
+    		throw new IllegalArgumentException();
+    	}
+    }
+    
     public void setPixel(int x, int y, Color color)
     {
     	if (x >= 0 && x < canvas.getWidth() && y >= 0 && y < canvas.getHeight())

@@ -39,7 +39,7 @@ public class YPlane extends Renderable
 	{
 		//Solve when yEqn = yValue;
 		double tValue = ray.yEquation.SolveWhenSetEqualTo(yValue);
-		if(tValue > Ray.LOWER_T_BOUND /*&& Math.abs(ray.GetPointAt(tValue).x) < 100*/)
+		if(tValue > Ray.LOWER_T_BOUND && Math.abs(ray.GetPointAt(tValue).x) < 10000 && Math.abs(ray.GetPointAt(tValue).z) < 10000)
 		{
 			return tValue;
 		}
